@@ -4,6 +4,7 @@ import { useForm, ValidationError } from "@formspree/react";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { useTheme } from "../context/ThemeContext"; // Import useTheme
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,12 +12,12 @@ const LatestDate = new Date();
 const latestYear = LatestDate.getFullYear();
 
 const Contact = () => {
-  const [state, handleSubmit] = useForm("xzbnkyej"); 
+  const [state, handleSubmit] = useForm("xzbnkyej");
   const contactRef = useRef(null);
   const formRef = useRef(null);
   const linksRef = useRef(null);
+  const { theme } = useTheme(); // Use theme context
 
-  // GSAP Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -55,14 +56,11 @@ const Contact = () => {
     return () => ctx.revert();
   }, []);
 
-  // Handle successful submission
   if (state.succeeded) {
-    // You can replace window.alert with a more styled toast notification if you prefer
     return (
       <div
         id="contact"
-        className="container mx-auto py-20 px-4 md:px-8 text-center"
-        style={{ backgroundColor: 'var(--color-app-bg)', color: 'var(--color-primary-text)' }}
+        className="section-overlay container mx-auto py-20 px-4 md:px-8 text-center" // Use section-overlay
       >
         <h2 className="text-4xl font-bold text-center text-[var(--color-accent-neon-blue)] mb-12">
           Get in Touch
@@ -74,8 +72,8 @@ const Contact = () => {
           You can close this window or return to the portfolio.
         </p>
         <button
-          onClick={() => window.location.reload()} // Simple way to reset, or navigate to a specific page
-          className="mt-8 bg-[var(--color-accent-orange)] text-[var(--color-primary-text)] px-6 py-3 rounded-full font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300 shadow-md"
+          onClick={() => window.location.reload()}
+          className="mt-8 bg-[var(--color-accent-orange)] text-[var(--color-primary-text)] px-6 py-3 rounded-full font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300 shadow-md shadow-theme-adapt" // Add shadow-theme-adapt
         >
           Send Another Message
         </button>
@@ -87,8 +85,7 @@ const Contact = () => {
     <section
       id="contact"
       ref={contactRef}
-      className="container mx-auto py-20 px-4 md:px-8"
-      style={{ backgroundColor: 'var(--color-app-bg)', color: 'var(--color-primary-text)' }}
+      className="section-overlay container mx-auto py-20 px-4 md:px-8" // Use section-overlay
     >
       <h2 className="text-4xl font-bold text-center text-[var(--color-accent-neon-blue)] mb-12">
         Take A
@@ -98,17 +95,15 @@ const Contact = () => {
         With Me
       </h2>
       <div className="flex flex-col md:flex-row items-start gap-12">
-        {/* Left Section - Contact Image and Social Links */}
-        <div ref={linksRef} className="md:w-1/2 w-full flex flex-col items-center p-8 rounded-xl shadow-lg"
-             style={{ backgroundColor: 'var(--color-section-bg)' }}>
+        <div ref={linksRef} className="md:w-1/2 w-full flex flex-col items-center p-8 rounded-xl shadow-lg section-card-bg shadow-theme-adapt"> {/* Use section-card-bg and shadow-theme-adapt */}
           <img
-            src="/images/contact-illustration.svg" // Assuming you'll add this SVG to public/images
+            src="/images/contact-illustration.svg"
             alt="Contact Illustration"
             className="w-full max-w-sm mb-8"
           />
           <div className="flex flex-col items-center space-y-4 text-lg">
             <a
-              className="flex items-center bg-[var(--color-tertiary-text)] text-[var(--color-primary-text)] px-5 py-2 rounded-full font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300"
+              className="flex items-center bg-[var(--color-tertiary-text)] text-[var(--color-primary-text)] px-5 py-2 rounded-full font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300 shadow-md"
               href="https://www.linkedin.com/in/bhanu-pratap-patkar/"
               target="_blank"
               rel="noopener noreferrer"
@@ -123,8 +118,8 @@ const Contact = () => {
               LinkedIn
             </a>
             <a
-              className="flex items-center bg-[var(--color-tertiary-text)] text-[var(--color-primary-text)] px-5 py-2 rounded-full font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300"
-              href="https://github.com/Bppatkar/"
+              className="flex items-center bg-[var(--color-tertiary-text)] text-[var(--color-primary-text)] px-5 py-2 rounded-full font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300 shadow-md"
+              href="https://github.com/Bppatkar"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -138,7 +133,7 @@ const Contact = () => {
               GitHub
             </a>
             <a
-              className="flex items-center bg-[var(--color-tertiary-text)] text-[var(--color-primary-text)] px-5 py-2 rounded-full font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300"
+              className="flex items-center bg-[var(--color-tertiary-text)] text-[var(--color-primary-text)] px-5 py-2 rounded-full font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300 shadow-md"
               href="mailto:bhanupratappatkar777@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -160,11 +155,9 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Right Section - Contact Form */}
         <div
           ref={formRef}
-          className="md:w-1/2 w-full p-8 rounded-xl shadow-lg"
-          style={{ backgroundColor: 'var(--color-section-bg)' }}
+          className="md:w-1/2 w-full p-8 rounded-xl shadow-lg section-card-bg shadow-theme-adapt" // Use section-card-bg and shadow-theme-adapt
         >
           <p className="text-[var(--color-secondary-text)] text-lg mb-6 text-center">
             Fill This Form to Send a mail for me
@@ -182,8 +175,7 @@ const Contact = () => {
                 name="name"
                 type="text"
                 placeholder="Full Name"
-                className="shadow appearance-none border rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
-                style={{ backgroundColor: 'var(--color-app-bg)', color: 'var(--color-primary-text)', borderColor: 'var(--color-tertiary-text)', outlineColor: 'var(--color-accent-neon-blue)' }}
+                className="shadow appearance-none border rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline form-input-styles" // Use form-input-styles
                 required
               />
               <ValidationError
@@ -204,8 +196,7 @@ const Contact = () => {
                 name="email"
                 type="email"
                 placeholder="Email"
-                className="shadow appearance-none border rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
-                style={{ backgroundColor: 'var(--color-app-bg)', color: 'var(--color-primary-text)', borderColor: 'var(--color-tertiary-text)', outlineColor: 'var(--color-accent-neon-blue)' }}
+                className="shadow appearance-none border rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline form-input-styles" // Use form-input-styles
                 required
               />
               <ValidationError
@@ -226,8 +217,7 @@ const Contact = () => {
                 name="mobile"
                 type="tel"
                 placeholder="Number"
-                className="shadow appearance-none border rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline"
-                style={{ backgroundColor: 'var(--color-app-bg)', color: 'var(--color-primary-text)', borderColor: 'var(--color-tertiary-text)', outlineColor: 'var(--color-accent-neon-blue)' }}
+                className="shadow appearance-none border rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline form-input-styles" // Use form-input-styles
               />
               <ValidationError
                 prefix="Mobile"
@@ -245,10 +235,9 @@ const Contact = () => {
               <textarea
                 id="message"
                 name="message"
-                placeholder="Your Message"
                 rows="6"
-                className="shadow appearance-none border rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline resize-y" // Added resize-y
-                style={{ backgroundColor: 'var(--color-app-bg)', color: 'var(--color-primary-text)', borderColor: 'var(--color-tertiary-text)', outlineColor: 'var(--color-accent-neon-blue)' }}
+                placeholder="Your message here..."
+                className="shadow appearance-none border rounded-lg w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline form-input-styles" // Use form-input-styles
                 required
               ></textarea>
               <ValidationError
@@ -260,18 +249,16 @@ const Contact = () => {
             <button
               type="submit"
               disabled={state.submitting}
-              className="bg-[var(--color-accent-orange)] text-[var(--color-primary-text)] px-6 py-3 rounded-full font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300 shadow-md"
+              className="bg-[var(--color-accent-orange)] text-[var(--color-primary-text)] px-8 py-4 rounded-full text-lg font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300 shadow-lg w-full shadow-theme-adapt" // Add shadow-theme-adapt
             >
-              {state.submitting ? "Sending..." : "Send Message"}
+              Send Message
             </button>
-            <ValidationError errors={state.errors} /> {/* General form errors */}
           </form>
         </div>
       </div>
-      <p className="text-[var(--color-secondary-text)] text-center mt-12 text-sm">
-        Designed and build by Bhanu Pratap, {latestYear} All rights reserved
-        &copy;.
-      </p>
+      <footer className="mt-20 text-center text-[var(--color-secondary-text)] text-sm">
+        <p>&copy; {latestYear} Bhanu Pratap Patkar. All rights reserved.</p>
+      </footer>
     </section>
   );
 };

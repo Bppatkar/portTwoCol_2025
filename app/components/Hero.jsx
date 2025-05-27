@@ -2,112 +2,79 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import Typed from "typed.js"; // Import Typed.js
+import Link from "next/link";
 
 function Hero() {
   const heroRef = useRef(null);
-  const nameRef = useRef(null);
-  const titleRef = useRef(null);
+  const textRef = useRef(null);
   const buttonRef = useRef(null);
-  const typedSpanRef = useRef(null); // Ref for Typed.js span
+  const videoRef = useRef(null);
 
   useEffect(() => {
-    // GSAP Animations
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
+    gsap.fromTo(
+      textRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 1, delay: 0.5, ease: "power3.out" }
+    );
+    gsap.fromTo(
+      buttonRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 1, delay: 0.8, ease: "power3.out" }
+    );
 
-      tl.fromTo(
-        nameRef.current,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
-      )
-        .fromTo(
-          titleRef.current,
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
-          "-=0.5"
-        )
-        .fromTo(
-          buttonRef.current,
-          { opacity: 0, scale: 0.8 },
-          { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
-          "-=0.5"
-        );
-    }, heroRef);
-
-    // Typed.js Effect
-    const typed = new Typed(typedSpanRef.current, {
-      strings: [
-        "Full stack Developer",
-        "Web Developer",
-        "Front-end Developer",
-        "Back-end Developer",
-        "UI-UX Designer",
-        "Coder",
-      ],
-      loop: true,
-      typeSpeed: 100,
-      backSpeed: 100,
-      backDelay: 1500,
-    });
-
-    return () => {
-      ctx.revert();
-      typed.destroy(); // Clean up Typed.js instance on unmount
-    };
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(error => {
+        console.log("Video autoplay blocked:", error);
+      });
+    }
   }, []);
 
   return (
     <section
-      ref={heroRef}
       id="hero"
-      className="relative h-screen flex flex-col justify-center items-center text-center p-4 overflow-hidden"
-      style={{ color: 'var(--color-primary-text)' }}
+      ref={heroRef}
+      className="relative min-h-screen flex flex-col justify-center items-center text-center overflow-hidden z-0"
     >
-      {/* Background Video */}
       <video
+        ref={videoRef}
         autoPlay
         loop
-        muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        poster="/images/video-poster.jpg" // Optional: A static image to show while video loads
+        preload="auto"
+        poster="/images/hero-background-poster.jpg"
+        className="fixed inset-0 w-full h-full object-cover z-[-1] opacity-40"
       >
         <source src="/videos/hero-background.mp4" type="video/mp4" />
-        {/* If using a GIF, replace <video> with <img> and update src:
-        <img src="/gifs/hero-background.gif" alt="Hero Background" className="absolute inset-0 w-full h-full object-cover z-0" />
-        */}
-        Your browser does not support the video tag.
       </video>
-
-      {/* Overlay to ensure text readability */}
-      <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
-
-      {/* Content */}
-      <div className="z-20 relative">
+      <div className="relative z-10 p-4 max-w-4xl mx-auto flex flex-col justify-center items-center h-screen">
         <h1
-          ref={nameRef}
-          className="text-5xl md:text-7xl font-bold mb-4 leading-tight text-[var(--color-primary-text)]"
+          ref={textRef}
+          className="text-5xl md:text-7xl font-bold text-[var(--color-primary-text)] mb-4"
         >
-          Hello, I'm <span className="text-[var(--color-accent-neon-blue)]">Jane Doe</span>
+          Hello, I'm{" "}
+          <span className="text-[var(--color-accent-neon-blue)]">
+            Bhanu Pratap
+          </span>
         </h1>
         <p
-          ref={titleRef}
-          className="text-xl md:text-3xl mb-8 max-w-2xl text-[var(--color-secondary-text)]"
+          ref={textRef}
+          className="text-lg md:text-2xl text-[var(--color-secondary-text)] mb-8"
         >
           A passionate{" "}
-          <span className="font-semibold text-[var(--color-accent-orange)]"> {/* Changed to accent-orange */}
-            <span ref={typedSpanRef} id="typed-output"></span>
+          <span className="text-[var(--color-accent-orange)] font-semibold">
+            Full Stack Developer
           </span>{" "}
           building engaging web experiences.
         </p>
-        <a
-          ref={buttonRef}
-          href="#projects"
-          className="px-8 py-4 bg-[var(--color-accent-orange)] text-[var(--color-primary-text)] font-bold text-lg rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out transform hover:shadow-xl hover:bg-[var(--color-accent-neon-blue)]" // Hover to neon blue
-        >
-          View My Work
-        </a>
+        <Link href="#projects">
+          <button
+            ref={buttonRef}
+            className="bg-[var(--color-accent-orange)] text-[var(--color-primary-text)] px-8 py-4 rounded-full text-lg font-semibold hover:bg-[var(--color-accent-neon-blue)] transition-colors duration-300 shadow-lg shadow-theme-adapt"
+          >
+            View My Work
+          </button>
+        </Link>
       </div>
     </section>
   );
