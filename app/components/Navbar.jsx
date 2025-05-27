@@ -1,11 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 function Navbar() {
   const navRef = useRef(null);
+  const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
     gsap.fromTo(
@@ -13,6 +17,29 @@ function Navbar() {
       { y: -100, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
     );
+
+    const sections = ["hero", "about", "projects", "contact"];
+    const handleScroll = () => {
+      let currentActive = "hero";
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sections[i]);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+            currentActive = sections[i];
+            break;
+          }
+        }
+      }
+      setActiveSection(currentActive);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
@@ -32,7 +59,9 @@ function Navbar() {
           <li>
             <Link
               href="#about"
-              className="text-[var(--color-primary-text)] hover:text-[var(--color-accent-neon-blue)] transition-colors duration-300 font-semibold"
+              className={`font-semibold transition-colors duration-300 ${
+                activeSection === "about" ? "text-[var(--color-accent-orange)]" : "text-[var(--color-primary-text)] hover:text-[var(--color-accent-neon-blue)]"
+              }`}
             >
               About
             </Link>
@@ -40,7 +69,9 @@ function Navbar() {
           <li>
             <Link
               href="#projects"
-              className="text-[var(--color-primary-text)] hover:text-[var(--color-accent-neon-blue)] transition-colors duration-300 font-semibold"
+              className={`font-semibold transition-colors duration-300 ${
+                activeSection === "projects" ? "text-[var(--color-accent-orange)]" : "text-[var(--color-primary-text)] hover:text-[var(--color-accent-neon-blue)]"
+              }`}
             >
               Projects
             </Link>
@@ -48,7 +79,9 @@ function Navbar() {
           <li>
             <Link
               href="#contact"
-              className="text-[var(--color-primary-text)] hover:text-[var(--color-accent-neon-blue)] transition-colors duration-300 font-semibold"
+              className={`font-semibold transition-colors duration-300 ${
+                activeSection === "contact" ? "text-[var(--color-accent-orange)]" : "text-[var(--color-primary-text)] hover:text-[var(--color-accent-neon-blue)]"
+              }`}
             >
               Contact
             </Link>
